@@ -1,0 +1,70 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.MainDiv{
+  background-color: #ffff;
+  height: 100vh;
+}
+
+.header{
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.btn{
+  height: 40px;
+}
+.loginCard{
+ height: 60vh;
+  width: 40vw;
+  margin:auto;
+  margin-top: 10vh;
+
+}
+.loginCard form{
+  width:80%;
+}
+.loginCard form input{
+  height: 40px;
+  width: 100%;
+  padding: 20px;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  outline: none;
+  border-radius: 1.5rem;
+}
+
+.home{
+  width:100%;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+  .MainDiv{
+    height: 100%;
+  }
+  .loginCard{
+    width: 90vw;
+    height: 70vh;
+    margin-top: 5vh;
+  }
+  
+}
