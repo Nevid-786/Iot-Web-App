@@ -1,7 +1,11 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
+
+
+
 
 export default class AuthService {
   static signup(userData) {
-    return fetch("http://localhost:3000/signup", {
+    return fetch(`${BASE_URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -12,7 +16,7 @@ export default class AuthService {
   }
 
   static login(userData) {
-    return fetch("http://localhost:3000/login", {
+    return fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -23,7 +27,7 @@ export default class AuthService {
   }
  
   static currentUser() {
-    return fetch("http://localhost:3000/current-user", {
+    return fetch(`${BASE_URL}/current-user`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -32,7 +36,7 @@ export default class AuthService {
     })
   }
   static logout() {
-    return fetch("http://localhost:3000/logout", {
+    return fetch(`${BASE_URL}/logout`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
