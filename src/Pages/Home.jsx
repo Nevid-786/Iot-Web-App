@@ -75,11 +75,11 @@ useEffect(() => {
         </div>
         <div className='bg-purple-600 rounded-lg p-6 text-white'>
           <p className='text-slate-200 text-sm mb-2'>Avg Temperature</p>
-          <p className='text-3xl font-bold'>22.5°C</p>
+          <p className='text-3xl font-bold'>{ sensors?.T?(sensors.T.toFixed(2)+"°C"):("No Temperature Sensor")}</p>
         </div>
         <div className='bg-orange-600 rounded-lg p-6 text-white'>
           <p className='text-slate-200 text-sm mb-2'>Humidity</p>
-          <p className='text-3xl font-bold'>62%</p>
+          <p className='text-3xl font-bold'>{ sensors?.H?(sensors.H.toFixed(2)+"%"):("No Humidty Sensor")}</p>
         </div>
         <div className='bg-indigo-600 rounded-lg p-6 text-white'>
           <p className='text-slate-200 text-sm mb-2'>User ID</p>
