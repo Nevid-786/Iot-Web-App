@@ -1,72 +1,70 @@
-import React from 'react'
+import React, { use } from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import AuthService from '../Services/authservice';
 import SensorService from '../Services/sensorService';
+  import { useRef } from "react";
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import {io} from "socket.io-client";
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+
+
+
 
 const Home = () => {
   const [logged, setlogged] = useState(false)
+  const [pole, setPole] = useState("pole-A")
+  const [sensors, setSensors] = useState([]);
 
-  const [user, setuser] = useState({});
+ const user =useSelector((state) => state.auth.user);
   const [devices, setDevices] = useState([])
+  const axiosprivate=useAxiosPrivate();
 
-
-
-
-
-
-
-
+ const socket = useMemo(
+    () =>
+      io("http://localhost:3000", {
+        withCredentials: true,
+      }),
+    []
+  );
   useEffect(() => {
+    console.log("pole changed",pole)
+    socket.emit("pole",pole)
+  }, [pole])
 
-    // Check if user is logged in
-    AuthService.currentUser().then(res => res.json()).then((data) => {
-      if (data.user._id) {
-        console.log(data.user._id)
-        setlogged(true);
- const interval = setInterval(() => {
-      SensorService.getSensors({
-          poleId: "pole-A",
-          userId: data.user._id
-        }).then(res => res.json()).then((res) => {
-          console.log("Nevid")
-          console.log(res);
-          setDevices(res);
-
-        })
-
-
-    
-  }, 2000);
-
-
-
-
-
-
+useEffect(() => {
+  if (user) {
+    console.log("User found in Home component:", user.user._id);
+    setlogged(true);
+  }
+  socket.on("connect", () => {
+    console.log("Connected to Socket.IO server");
+  });
+  console.log("User in socket useEffect:", user);
+  if (user.user._id) {
+    socket.emit("register", user.user._id); // Register userId with the server
+  }
+  socket.on("sensorData", (data) => {
+    console.log("Received real-time sensor data:", data);
+    setSensors(data);
+  console.log("Current pole:", pole);
     
 
-
-        setuser(data.user);
-      }
-    }
-    ).catch((err) => {
-      console.log("Error fetching current user:", err);
-      setlogged(false);
-    })
-
-  return () => clearInterval(interval);
+  });
 
 
-  }, [])
-  
+  return () => {
+    socket.off("connect");
+  };
+} , [user]);
 
   return (
     <div className='home min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6'>
       {/* Header */}
       <div className='mb-8'>
         <h1 className='text-4xl font-bold text-white mb-2'>IoT Dashboard</h1>
-        <p className='text-slate-300'>Welcome back, {logged ? user?.name || 'User' : 'Guest'}</p>
+        <p className='text-slate-300'>Welcome back, {logged ? user.user?.firstName || 'User' : 'Guest'}</p>
       </div>
 
       {/* Quick Stats */}
@@ -85,21 +83,32 @@ const Home = () => {
         </div>
         <div className='bg-indigo-600 rounded-lg p-6 text-white'>
           <p className='text-slate-200 text-sm mb-2'>User ID</p>
-          <p className='text-sm font-mono overflow-hidden text-ellipsis'>{logged ? user?._id : 'Not logged'}</p>
+          <p className='text-sm font-mono overflow-hidden text-ellipsis'>{logged ? user.user?._id : 'Not logged'}</p>
         </div>
       </div>
 
       {/* Devices Section */}
-      <div className='mb-8'>
-        <h2 className='text-2xl font-bold text-white mb-4'>Your Devices</h2>
+      <div className='mb-8 w-full bg-slate-500'>
+        <h2 className='text-2xl font-bold text-white mb-4 p-2'>Your Devices</h2>
+        <div className='w-full bg-indigo-600 flex justify-center gap-x-2'>
+          <div className={`p-2 rounded-2xl mt-2 mb-2  ${pole === "pole-A" ? "bg-slate-500 pole-btn mb-0" : "bg-blue-600"}`} onClick={() => setPole("pole-A")}>
+            Pole-A
+          </div>
+          <div className={`p-2 rounded-2xl mt-2 mb-2  ${pole === "pole-B" ? "bg-slate-500 pole-btn mb-0" : "bg-blue-600"}`} onClick={() => setPole("pole-B")}>
+            Pole-B
+          </div>
+          <div className={`p-2 rounded-2xl mt-2 mb-2  ${pole === "pole-C" ? "bg-slate-500 pole-btn mb-0" : "bg-blue-600"}`} onClick={() => setPole("pole-C")}>
+            Pole-C
+          </div>
+        </div>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
-          {devices != [] ? (devices.map((device) => (
-            <div key={device.key} className='bg-slate-700 rounded-lg p-5 hover:bg-slate-600 transition cursor-pointer'>
+          {sensors && sensors!={} > 0 ? (Object.entries(sensors).map(([key,value]) => (
+            <div key={key} className='bg-slate-700 rounded-lg p-5 hover:bg-slate-600 transition cursor-pointer'>
 
-              <h3 className='text-white font-semibold mb-1'>{device.key}</h3>
+              <h3 className='text-white font-semibold mb-1'>{key}</h3>
 
               <div className='bg-slate-800 rounded p-2 text-white text-center font-bold'>
-                {device.value}
+                {value}
               </div>
             </div>
           ))) : ""}

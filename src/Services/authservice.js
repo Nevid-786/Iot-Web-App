@@ -4,6 +4,12 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 
 
 export default class AuthService {
+  static refreshToken() {
+    return fetch(`${BASE_URL}/refresh-token`, {
+      method: "GET",
+      credentials: "include"
+    })
+  }
   static signup(userData) {
     return fetch(`${BASE_URL}/signup`, {
       method: "POST",

@@ -27,8 +27,8 @@
   width:80%;
 }
 .loginCard form input{
-  height: 40px;
-  width: 100%;
+  /* height: 40px; */
+  /* width: 100%; */
   padding: 20px;
   font-size: 1.2rem;
   margin-bottom: 20px;
@@ -41,7 +41,11 @@
 
 
 }
-
+.pole-btn{
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  
+}
 
 
 

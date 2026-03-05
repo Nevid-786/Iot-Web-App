@@ -21,7 +21,7 @@ const navigate=useNavigate();
     };
 
     const handleSubmit = async(e) => {
-        console.log("submit")
+        console.log("submit",formData)
         setSubmit(false);
         e.preventDefault();
         console
@@ -79,6 +79,22 @@ const navigate=useNavigate();
                     placeholder="Confirm Password"
                     onChange={handleChange}
                 />
+                   <div className='flex justify-center items-center w-full gap-6'>
+                    <label htmlFor="admin" className='flex  gap-2 cursor-pointer'>
+                        <input type="radio" name="role" value="admin" id="admin" onChange={handleChange} style={{width: '30px', height: '30px'}} />
+                        <span className='pt-0.5' >
+                            Admin
+                        </span>
+                    </label>
+                    
+                    <label htmlFor="user" className='flex  gap-2 cursor-pointer'>
+                        <input type="radio" name="role" value="user" id="user" onChange={handleChange} style={{width: '30px', height: '30px'}}/>
+                         <span  className='pt-0.5'>
+                            User
+                        </span>
+                    </label>
+
+                </div>
                 <button className="btn bg-blue-500 text-white rounded-md w-full" type="submit" disabled={!submit}>Register</button>
             </form>
             <div>
