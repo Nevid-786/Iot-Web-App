@@ -23,7 +23,7 @@ const Home = () => {
 
  const socket = useMemo(
     () =>
-      io("http://localhost:3000", {
+      io(import.meta.env.VITE_API_URL, {
         withCredentials: true,
       }),
     []
