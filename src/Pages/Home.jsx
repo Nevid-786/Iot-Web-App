@@ -31,19 +31,21 @@ const Home = () => {
   useEffect(() => {
     console.log("pole changed",pole)
     socket.emit("pole",pole)
-  }, [pole])
+  }, [pole,user])
 
 useEffect(() => {
   if (user) {
-    console.log("User found in Home component:", user.user._id);
+    console.log("User found in Home component:", user?.user?._id);
     setlogged(true);
   }
   socket.on("connect", () => {
     console.log("Connected to Socket.IO server");
   });
+ 
   console.log("User in socket useEffect:", user);
-  if (user.user._id) {
-    socket.emit("register", user.user._id); // Register userId with the server
+  if (user?.user?._id) {
+    socket.emit("register", user.user?._id);
+     socket.emit("pole",pole) // Register userId with the server
   }
   socket.on("sensorData", (data) => {
     console.log("Received real-time sensor data:", data);
@@ -83,7 +85,7 @@ useEffect(() => {
         </div>
         <div className='bg-indigo-600 rounded-lg p-6 text-white'>
           <p className='text-slate-200 text-sm mb-2'>User ID</p>
-          <p className='text-sm font-mono overflow-hidden text-ellipsis'>{logged ? user.user?._id : 'Not logged'}</p>
+          <p className='text-sm font-mono overflow-hidden text-ellipsis'>{logged ? user?.user?._id : 'Not logged'}</p>
         </div>
       </div>
 
