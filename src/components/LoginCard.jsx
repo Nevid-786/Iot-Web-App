@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import AuthService from '../Services/authservice';
 import { login } from '../Slices/authSlice';
 import { useDispatch } from 'react-redux';
+
+
+
+
 const LoginCard = () => {
     const [submit, setSubmit] = useState(true);
     const [errors, setErrors] = useState([]);
@@ -39,7 +43,7 @@ const LoginCard = () => {
             return;
         }
         console.log("login successful:", data);
-        dispatch(login({ user: data, token: "abjbjsd", role: data.role||"user" }));
+        dispatch(login({ user: data, token: "abjbjsd", role: data.role||"user",isAuth:true }));
          console.log("login dispacth");
         navigate('/'); // Redirect to home page after login
        

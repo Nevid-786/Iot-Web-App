@@ -14,12 +14,13 @@ const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   //  const token=useSelector(state=>state.auth.token);console.log(token);
-  useEffect(() => {
+   useEffect(() => {
     AuthService.currentUser()
       .then(res => res.json())
       .then(data => {
         if (data.user) {
-           dispatch(login({ user: data, token: "abjbjsd", role: data.role||"user" }));
+          console.log("current user data in header component:", data.user);
+           dispatch(login({ user: data.user, token: "abjbjsd", role: data.role||"user" }));
                    console.log("login dispacth");
                  
         } else {
@@ -37,6 +38,7 @@ const Header = () => {
   }, [])
   
 
+ 
   useEffect(() => {
 
     console.log("useEffect in header, user:", user);
@@ -49,7 +51,7 @@ const Header = () => {
       setlogged(false)
     }
 
-  }, [user])
+  }, [dispatch,navigate,user])
 
 
   const handleLogout = () => {
